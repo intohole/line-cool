@@ -26,6 +26,7 @@ sublime 编写历程
 ##保存在Packages/下任一目录##
 + 运行方式 CTRL + ` 运行consle ，命令view.run_command('example')
 + eg. ExampleCommand -> LineCoolCommand : view.run_command('line_cool') #去掉command 后缀，命名的驼峰变为下划线
++ 最快捷打开空间所在地 : Preferences - > Browse Package
 + 
 
 
