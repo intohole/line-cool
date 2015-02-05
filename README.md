@@ -35,3 +35,4 @@ sublime 编写历程
 引用
 ---------------------
 +  <a href="http://mux.alimama.com/posts/541">插件开发</a>
++  <a href="http://www.oschina.net/translate/how-to-create-a-sublime-text-2-plugin?cmp">官方简单制作插件翻译</a>

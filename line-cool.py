@@ -5,6 +5,7 @@ import sublime_plugin
 import re
 
 
+
 class LineCoolCommand(sublime_plugin.TextCommand):
 
     #暂时定义\n三个以上为块分隔符
@@ -13,6 +14,9 @@ class LineCoolCommand(sublime_plugin.TextCommand):
     placeholder = "    "
     line_split = '\t\t'
     def get_cur_content(self):
+        '''
+        得到当前编辑view中的所有文本
+        '''
         return self.view.substr(sublime.Region(0, self.view.size()))
 
     def run(self, edit):
@@ -28,9 +32,7 @@ class LineCoolCommand(sublime_plugin.TextCommand):
         max_len = max(len(chunk) for chunk in contents)
         #块数
         chunk_size = len(contents)
-
         datas = []
-
         for  i in range(max_len):
             items = []
             for j in range(chunk_size):
@@ -39,8 +41,18 @@ class LineCoolCommand(sublime_plugin.TextCommand):
                     item = contents[j][i]
                 items.append(item)
             datas.append(items)
-        for items in datas:
-            print self.line_split.join(items)
+        self.create_new_file(datas)
+        # for items in datas:
+        #     print self.line_split.join(items)
+
+
+    def create_new_file(self , contents):
+        window = sublime.active_window() #得到当前活动window
+        view = window.new_file() #创建文件view
+        edit = view.begin_edit() #开始编辑view
+        _contents = '\n'.join([self.line_split.join(items) for items in contents]) #转换为文本
+        view.insert(edit , 0 , _contents)
+        view.end_edit()
 
 
 if __name__ == '__main__':
