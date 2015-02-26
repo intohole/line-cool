@@ -42,8 +42,29 @@ class LineCoolCommand(sublime_plugin.TextCommand):
                 items.append(item)
             datas.append(items)
         self.create_new_file(datas)
-        # for items in datas:
-        #     print self.line_split.join(items)
+
+    def get_datas_gather(self, *argv):
+        gathers = []
+        sorted_list =sort_list_by_len(*argv)
+        for i in range(sorted_list[0][1]):
+            _tmp = []
+            for ll in sorted_list:
+                if ll[1] > i:
+                    try:
+                        _tmp.index(ll[0][i])
+                    except Exception, e:
+                        _tmp.append(ll[0][i])
+            gathers.extend(_tmp)
+        return gathers
+
+    def sort_list_by_len(self, *argv):
+        return sorted([(ll, len(ll)) for ll in argv if ll and hasattr(ll, '__len__') else raise Exception, '%s is not right' % ll], key=lambda x: x[1], reverse=True)
+
+    def excute_data(self,  contents):
+        '''
+        data format :
+            datas [[line11 content , line12 content  , ....  line1n content] , [line2 content  , line22  , ... line2n] ]
+        '''
 
     def create_new_file(self, contents):
         window = sublime.active_window()  # 得到当前活动window
