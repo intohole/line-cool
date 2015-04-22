@@ -58,7 +58,7 @@ class LineCoolCommand(sublime_plugin.TextCommand):
         return gathers
 
     def sort_list_by_len(self, *argv):
-        return sorted([(ll, len(ll)) for ll in argv if ll and hasattr(ll, '__len__') else raise Exception, '%s is not right' % ll], key=lambda x: x[1], reverse=True)
+        return sorted([(ll, len(ll)) for ll in argv if ll and hasattr(ll, '__len__') ], key=lambda x: x[1], reverse=True)
 
     def excute_data(self,  contents):
         '''
