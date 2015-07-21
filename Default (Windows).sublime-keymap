@@ -1,4 +1,5 @@
 [
     { "keys": ["ctrl+alt+l"], "command": "line_cool" },
-    { "keys": ["ctrl+alt+b"], "command": "url_cool" }
+    { "keys": ["ctrl+alt+i"], "command": "base_cool" },
+    { "keys": ["ctrl+alt+j"], "command": "url_cool" }
 ]

@@ -5,7 +5,7 @@ import sublime_plugin
 import re
 
 
-class LineCoolCommand(sublime_plugin.TextCommand):
+class _LineCoolCommand(sublime_plugin.TextCommand):
 
     # 暂时定义\n三个以上为块分隔符
 
@@ -25,7 +25,7 @@ class LineCoolCommand(sublime_plugin.TextCommand):
         data_container = self.__split(content)
         # 得到每个块内部pieces
         contents = [
-            [pic for pic in chunk.split('\n')]
+            [pic for pic in chunk.split(self._split_item)]
             for chunk in data_container
         ]
         # 获得最大块含有行数
@@ -41,24 +41,24 @@ class LineCoolCommand(sublime_plugin.TextCommand):
                     item = contents[j][i]
                 items.append(item)
             datas.append(items)
-        self.create_new_file(datas)
+        self.create_new_file(edit, datas)
 
     def get_datas_gather(self, *argv):
         gathers = []
-        sorted_list =sort_list_by_len(*argv)
+        sorted_list = sort_list_by_len(*argv)
         for i in range(sorted_list[0][1]):
             _tmp = []
             for ll in sorted_list:
                 if ll[1] > i:
                     try:
                         _tmp.index(ll[0][i])
-                    except Exception, e:
+                    except Exception:
                         _tmp.append(ll[0][i])
             gathers.extend(_tmp)
         return gathers
 
     def sort_list_by_len(self, *argv):
-        return sorted([(ll, len(ll)) for ll in argv if ll and hasattr(ll, '__len__') ], key=lambda x: x[1], reverse=True)
+        return sorted([(ll, len(ll)) for ll in argv if ll and hasattr(ll, '__len__')], key=lambda x: x[1], reverse=True)
 
     def excute_data(self,  contents):
         '''
@@ -66,18 +66,27 @@ class LineCoolCommand(sublime_plugin.TextCommand):
             datas [[line11 content , line12 content  , ....  line1n content] , [line2 content  , line22  , ... line2n] ]
         '''
 
-    def create_new_file(self, contents):
+    def create_new_file(self, edit, contents):
         window = sublime.active_window()  # 得到当前活动window
         view = window.new_file()  # 创建文件view
-        edit = view.begin_edit()  # 开始编辑view
+        view.set_name('new_file')
+        # 开始编辑view
         _contents = '\n'.join(
             [
-                ''.join(['{0:<10s}'.format(item) for item in items])
+                ''.join(['{0:<30s}'.format(item) for item in items])
                 for items in contents
             ]
         )  # 转换为文本
         view.insert(edit, 0, _contents)
-        view.end_edit()
+
+
+class LineCoolCommand(_LineCoolCommand):
+
+    _split_item = '\n'
+
+
+class BaseCoolCommand(_LineCoolCommand):
+    _split_item = None
 
 
 if __name__ == '__main__':
